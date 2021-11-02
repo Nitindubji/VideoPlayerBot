@@ -32,7 +32,7 @@ from pytgcalls import GroupCallFactory
 from helpers.bot_utils import USERNAME
 from config import AUDIO_CALL, VIDEO_CALL
 from youtubesearchpython import VideosSearch
-from helpers.decorators import authorized_users_only
+from helpers.decorators import authorized_users_only, sudo_users_only
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, CallbackQuery
 
 
@@ -100,19 +100,19 @@ async def end_callbacc(client, CallbackQuery):
 
 
 @Client.on_message(filters.command(["stream", f"stream@{USERNAME}"]) & filters.group & ~filters.edited)
-@authorized_users_only
+@sudo_users_only
 async def stream(client, m: Message):
     msg = await m.reply_text("🔄 `Processing ...`")
     chat_id = m.chat.id
     media = m.reply_to_message
     if not media and not ' ' in m.text:
-        await msg.edit("❗ __Send Me An Live Stream Link / YouTube Video Link / Reply To An Video To Start Video Streaming!__")
+        await msg.edit("❗ __Send Limk To Start Video Streaming!__")
 
     elif ' ' in m.text:
         text = m.text.split(' ', 1)
         query = text[1]
         if not 'http' in query:
-            return await msg.edit("❗ __Send Me An Live Stream Link / YouTube Video Link / Reply To An Video To Start Video Streaming!__")
+            return await msg.edit("❗ __Send Limk To Start Video Streaming!__")
         regex = r"^(https?\:\/\/)?(www\.youtube\.com|youtu\.?be)\/.+"
         match = re.match(regex, query)
         if match:
@@ -211,7 +211,7 @@ async def stream(client, m: Message):
             await msg.delete()
             await m.reply_photo(
                photo=thumb,
-               caption=f"▶️ **Started [Video Streaming](https://t.me/AsmSafone) In {m.chat.title} !**",
+               caption=f"▶️ **Started Video Streaming In {m.chat.title} !**",
                reply_markup=InlineKeyboardMarkup(
                [
                    [
@@ -253,7 +253,7 @@ async def stream(client, m: Message):
 
 
 @Client.on_message(filters.command(["pause", f"pause@{USERNAME}"]) & filters.group & ~filters.edited)
-@authorized_users_only
+@sudo_users_only
 async def pause(_, m: Message):
     chat_id = m.chat.id
 
@@ -270,7 +270,7 @@ async def pause(_, m: Message):
 
 
 @Client.on_message(filters.command(["resume", f"resume@{USERNAME}"]) & filters.group & ~filters.edited)
-@authorized_users_only
+@sudo_users_only
 async def resume(_, m: Message):
     chat_id = m.chat.id
 
@@ -287,7 +287,7 @@ async def resume(_, m: Message):
 
 
 @Client.on_message(filters.command(["endstream", f"endstream@{USERNAME}"]) & filters.group & ~filters.edited)
-@authorized_users_only
+@sudo_users_only
 async def endstream(client, m: Message):
     msg = await m.reply_text("🔄 `Processing ...`")
     chat_id = m.chat.id
