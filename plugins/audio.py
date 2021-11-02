@@ -10,12 +10,12 @@ from pyrogram.types import Message
 from helpers.bot_utils import USERNAME
 from config import AUDIO_CALL, VIDEO_CALL
 from plugins.video import ydl, group_call
-from helpers.decorators import authorized_users_only, sudo_users_only
+from helpers.decorators import sudo_users_only
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, CallbackQuery
 
 
 @Client.on_message(filters.command(["play", f"play@{USERNAME}"]) & filters.group & ~filters.edited)
-@authorized_users_only
+@sudo_users_only
 async def play(client, m: Message):
     msg = await m.reply_text("🔄 `Processing ...`")
     chat_id = m.chat.id
